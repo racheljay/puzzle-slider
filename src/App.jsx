@@ -6,6 +6,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.win = Array(16).fill().map((item, index) => index)
+
     // this.blank = gameTiles[0]
     this.state = {
       gameTiles: []
@@ -13,50 +14,66 @@ class App extends React.Component {
 
     this.renderWins = this.renderWins.bind(this);
     this.clickAction = this.clickAction.bind(this);
+    this.updateTileStatus = this.updateTileStatus.bind(this);
   }
 
   renderWins() {
     let arr = []
-    for(let i = 0; i < 16; i++) {
-      arr.push({id: i, status: false})
-
+    for (let i = 0; i < 16; i++) {
+      arr.push({ id: i, status: false })
     }
-    // for (let i = 0; i < 16; i++) {
-    //   this.win.push(i)
-    // }
-    // let obj = {
-    //   name: item,
-    //   status: false
-    // }
-    // this.win.map((item, index) => {
-    //   let obj = {
-    //     name: item,
-    //     status: false
-    //   }
-      
-
-    // })
     this.setState({
       gameTiles: arr
     })
+
     console.log(this.state.gameTiles)
 
+  }
+
+  updateTileStatus() {
+    let blank = this.state.gameTiles.findIndex((element) => element.id === 0)
+    let newArr = this.state.gameTiles.map((item, index) => {
+
+      // if (item.id === 0) {
+      //   item.status = false
+
+      // }
+      if (index === blank + 1 || index === blank - 1 || index === blank + 4 || index === blank - 4) {
+        item.status = true
+      }
+      else {
+        item.status = false
+      }
+      return item
+    })
+    //if check if new array is different from game tiles
+    this.setState({
+      gameTiles: newArr
+    })
   }
 
 
   componentDidMount() {
     this.renderWins()
 
+
+  }
+
+  componentDidUpdate() {
+    this.updateTileStatus()
   }
 
 
   clickAction(num) {
-    // let blank = this.state.gameTiles.indexOf(num)
-    // if(blank === 0) {
-    //   this.clickAction((blank + 1), (blank + 4))
+    this.state.gameTiles.map((item, index) => {
+      if (item.status === true) {
+        console.log(item)
+      }
+    })
+    // if(this.state.gameTiles.status === true) {
 
 
-    console.log(num)
+    // console.log(num)
     // }
   }
 
@@ -74,20 +91,20 @@ class App extends React.Component {
 
         <div className="row">
 
-          {/* {this.state.gameTiles.map((item, index) => {
+          {this.state.gameTiles.map((item, index) => {
 
             return (<div
               key={index}
               className="col-3 border border-success"
-              id={item}
-              onClick={() => this.clickAction(item)}
-              
-            >
-              {item}
-              </div>
-              )
+              id={item.id}
+              onClick={() => this.clickAction(item.id)}
 
-          })} */}
+            >
+              {item.id}
+            </div>
+            )
+
+          })}
 
         </div>
       </div>
